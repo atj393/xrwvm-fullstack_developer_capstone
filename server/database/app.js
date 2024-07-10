@@ -58,7 +58,7 @@ app.get("/fetchReviews/dealer/:id", async (req, res) => {
 // Express route to fetch all dealerships
 app.get("/fetchDealers", async (req, res) => {
   try {
-    const dealers = await Dealership.find({});
+    const dealers = await Dealerships.find({});
     res.json(dealers);
   } catch (err) {
     res.status(500).send(err);
@@ -69,7 +69,7 @@ app.get("/fetchDealers", async (req, res) => {
 app.get("/fetchDealers/:state", async (req, res) => {
   try {
     const state = req.params.state;
-    const dealers = await Dealership.find({ state: state });
+    const dealers = await Dealerships.find({ state: state });
     res.json(dealers);
   } catch (err) {
     res.status(500).send(err);
@@ -80,7 +80,7 @@ app.get("/fetchDealers/:state", async (req, res) => {
 app.get("/fetchDealer/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const dealer = await Dealership.findById(id);
+    const dealer = await Dealerships.findById(id);
     res.json(dealer);
   } catch (err) {
     res.status(500).send(err);
