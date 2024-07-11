@@ -16,8 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.contrib.auth import logout
 from .models import CarMake, CarModel
-
-# from .populate import initiate
+from .populate import initiate
 
 
 # Get an instance of a logger
