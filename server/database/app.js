@@ -49,6 +49,7 @@ app.get("/fetchReviews", async (req, res) => {
 app.get("/fetchReviews/dealer/:id", async (req, res) => {
   try {
     const documents = await Reviews.find({ dealership: req.params.id });
+    print("🚀 ---> documents:", documents);
     res.json(documents);
   } catch (error) {
     res.status(500).json({ error: "Error fetching documents" });
@@ -59,7 +60,6 @@ app.get("/fetchReviews/dealer/:id", async (req, res) => {
 app.get("/fetchDealers", async (req, res) => {
   try {
     const dealers = await Dealerships.find({});
-    console.log("🚀 ---> dealers:", dealers);
     res.json(dealers);
   } catch (err) {
     res.status(500).send(err);
@@ -81,7 +81,8 @@ app.get("/fetchDealers/:state", async (req, res) => {
 app.get("/fetchDealer/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const dealer = await Dealerships.findById(id);
+    console.log("🚀 ---> req.params.id:", id );
+    const dealer = await Dealerships.findById(parseInt(id));
     res.json(dealer);
   } catch (err) {
     res.status(500).send(err);

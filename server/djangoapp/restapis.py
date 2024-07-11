@@ -17,7 +17,7 @@ def get_request(endpoint, **kwargs):
             params = params + key + "=" + value + "&"
     request_url = backend_url.rstrip("/") + endpoint + "?" + params.rstrip("&")
 
-    print("GET from {} ".format(request_url))
+    print("GET from {} ".format(request_url))  # Print the request URL
     try:
         response = requests.get(request_url)
         response.raise_for_status()  # Raise an HTTPError for bad responses
@@ -31,10 +31,11 @@ def post_review(data_dict):
     request_url = backend_url + "/insert_review"
     try:
         response = requests.post(request_url, json=data_dict)
-        print(response.json())
+        response.raise_for_status()  # Raise an HTTPError for bad responses
         return response.json()
-    except Exception as e:
+    except requests.exceptions.RequestException as e:
         print(f"Network exception occurred: {e}")
+        return None
 
 
 def analyze_review_sentiments(text):

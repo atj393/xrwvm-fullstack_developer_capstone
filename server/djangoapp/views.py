@@ -80,14 +80,17 @@ def register_user(request):
 # # Update the `get_dealerships` view to render the index page with
 # a list of dealerships
 # Update the `get_dealerships` render list of dealerships all by default, particular state if state is passed
+from django.http import JsonResponse
+from .restapis import get_request
+
+
 def get_dealerships(request, state="All"):
     if state == "All":
         endpoint = "/fetchDealers"
     else:
         endpoint = "/fetchDealers/" + state
     dealerships = get_request(endpoint)
-    print("🚀 ---> dealerships:", dealerships)
-    if dealerships:
+    if dealerships is not None:
         return JsonResponse({"status": 200, "dealers": dealerships})
     else:
         return JsonResponse({"status": 500, "message": "Failed to fetch dealers"})
@@ -98,6 +101,8 @@ def get_dealer_reviews(request, dealer_id):
     # if dealer id has been provided
     if dealer_id:
         endpoint = "/fetchReviews/dealer/" + str(dealer_id)
+        print("🚀 1 ---> endpoint:", endpoint);
+
         reviews = get_request(endpoint)
         for review_detail in reviews:
             response = analyze_review_sentiments(review_detail["review"])
@@ -112,7 +117,9 @@ def get_dealer_reviews(request, dealer_id):
 def get_dealer_details(request, dealer_id):
     if dealer_id:
         endpoint = "/fetchDealer/" + str(dealer_id)
+        print("🚀 2 ---> endpoint:", endpoint);
         dealership = get_request(endpoint)
+        print("🚀 ---> dealership:", dealership);
         return JsonResponse({"status": 200, "dealer": dealership})
     else:
         return JsonResponse({"status": 400, "message": "Bad Request"})
