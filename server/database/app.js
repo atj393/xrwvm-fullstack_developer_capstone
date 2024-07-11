@@ -59,6 +59,7 @@ app.get("/fetchReviews/dealer/:id", async (req, res) => {
 app.get("/fetchDealers", async (req, res) => {
   try {
     const dealers = await Dealerships.find({});
+    console.log("🚀 ---> dealers:", dealers);
     res.json(dealers);
   } catch (err) {
     res.status(500).send(err);

@@ -1,5 +1,4 @@
-# Uncomment the imports below before you add the function code
-# import requests
+import requests
 import os
 from dotenv import load_dotenv
 
@@ -16,22 +15,16 @@ def get_request(endpoint, **kwargs):
     if kwargs:
         for key, value in kwargs.items():
             params = params + key + "=" + value + "&"
-
-    request_url = backend_url + endpoint + "?" + params
+    request_url = backend_url.rstrip("/") + endpoint + "?" + params.rstrip("&")
 
     print("GET from {} ".format(request_url))
     try:
-        # Call get method of requests library with URL and parameters
         response = requests.get(request_url)
+        response.raise_for_status()  # Raise an HTTPError for bad responses
         return response.json()
-    except:
-        # If any error occurs
-        print("Network exception occurred")
-
-
-# def analyze_review_sentiments(text):
-# request_url = sentiment_analyzer_url+"analyze/"+text
-# Add code for retrieving sentiments
+    except requests.exceptions.RequestException as e:
+        print(f"Network exception occurred: {e}")
+        return None
 
 
 def post_review(data_dict):
@@ -40,16 +33,16 @@ def post_review(data_dict):
         response = requests.post(request_url, json=data_dict)
         print(response.json())
         return response.json()
-    except:
-        print("Network exception occurred")
+    except Exception as e:
+        print(f"Network exception occurred: {e}")
 
 
 def analyze_review_sentiments(text):
     request_url = sentiment_analyzer_url + "analyze/" + text
     try:
-        # Call get method of requests library with URL and parameters
         response = requests.get(request_url)
+        response.raise_for_status()  # Raise an HTTPError for bad responses
         return response.json()
-    except Exception as err:
-        print(f"Unexpected {err=}, {type(err)=}")
-        print("Network exception occurred")
+    except requests.exceptions.RequestException as e:
+        print(f"Network exception occurred: {e}")
+        return None
