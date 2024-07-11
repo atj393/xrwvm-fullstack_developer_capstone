@@ -96,11 +96,20 @@ def register_user(request):
 
 
 def get_cars(request):
-    count = CarMake.objects.filter().count()
-    if count == 0:
+    car_make_count = CarMake.objects.count()
+    car_model_count = CarModel.objects.count()
+
+    print(f"CarMake count: {car_make_count}")
+    print(f"CarModel count: {car_model_count}")
+
+    if car_make_count == 0 or car_model_count == 0:
+        print("Initiating database population")
         initiate()
+
     car_models = CarModel.objects.select_related("car_make")
     cars = []
     for car_model in car_models:
         cars.append({"CarModel": car_model.name, "CarMake": car_model.car_make.name})
+
+    print(f"Number of car models retrieved: {len(cars)}")
     return JsonResponse({"CarModels": cars})
